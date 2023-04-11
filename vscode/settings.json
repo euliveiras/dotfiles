@@ -1,0 +1,55 @@
+{
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "eslint.format.enable": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "workbench.colorTheme": "Dracula",
+    "editor.minimap.enabled": false,
+    "explorer.compactFolders": false,
+    "material-icon-theme.folders.associations": {
+        "shared": "Shared",
+        "modules": "Custom",
+        "infra": "Config",
+        "typeorm": "Database",
+        "http": "Connection",
+        "entities": "Custom",
+        "repositories": "Custom",
+        "application": "App"
+    },
+    "prettier.tabWidth": 4,
+    "prettier.printWidth": 100,
+    "prettier.bracketSpacing": true,
+    "prettier.bracketSameLine": true,
+    "prettier.semi": true,
+    "liveServer.settings.NoBrowser": true,
+    "workbench.iconTheme": "material-icon-theme",
+    "liveServer.settings.CustomBrowser": "firefox",
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "material-icon-theme.activeIconPack": "nest",
+    "vim.incsearch": true,
+    "vim.hlsearch": true,
+    "workbench.editorAssociations": {
+        "*.html": "default"
+    },
+    "liveServer.settings.donotShowInfoMsg": true,
+    "workbench.sideBar.location": "right"
+}
