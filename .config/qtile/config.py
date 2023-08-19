@@ -83,7 +83,11 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+ Key([   ], "XF86AudioRaiseVolume", lazy.spawn("amixer sset Master 1%+")),
+ Key([   ], "XF86AudioLowerVolume", lazy.spawn("amixer sset Master 1%-")),
+ Key([   ], "XF86AudioMute", lazy.spawn("amixer sset Master toggle")),
 ]
+
 
 groups = [Group(i) for i in "123"]
 
@@ -114,9 +118,11 @@ for i in groups:
 layouts = [
     layout.Columns(
         border_focus_stack=["#d75f5f", "#8f3d3d"], 
-        border_focus=colors["cyan"],
+        border_focus=colors["pink"],
         border_normal=colors["background"],
-        border_width=4
+        border_on_single=True,
+        border_width=4,
+        margin=4
         ),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
@@ -141,7 +147,7 @@ extension_defaults = widget_defaults.copy()
 
 screens = [
     Screen(
-        bottom=bar.Bar(
+        top=bar.Bar(
             [
                 widget.CurrentLayout(),
                 widget.Sep(
@@ -159,7 +165,19 @@ screens = [
                     ),
                 widget.Prompt(prompt="> ", padding=8),
                 widget.Spacer(length=bar.STRETCH),
-                widget.Memory(foreground=colors["orange"]),
+                widget.PulseVolume(fmt="volume: {}"),
+                widget.Sep(
+                    lineWidth=5,
+                    foreground=colors["purple"]
+                    ),
+                widget.ThermalSensor(foreground=colors["cyan"]),
+                widget.Sep(
+                    lineWidth=5,
+                    foreground=colors["purple"]
+                    ),
+                widget.Memory(foreground=colors["orange"], 
+                            format="{MemUsed: .0f}{mm} -{MemTotal: .0f}{mm}"
+                              ),
                 widget.Sep(
                     lineWidth=5,
                     foreground=colors["purple"]
@@ -177,13 +195,19 @@ screens = [
                 ),
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # widget.StatusNotifier(),
+                widget.Net(prefix="M", foreground=colors["yellow"]),
+                widget.Sep(
+                    lineWidth=5,
+                    foreground=colors["purple"]
+                    ),
                 widget.Systray(),
-                widget.Clock(format="%d/%m/%Y - %A, %I:%M %p", foreground=colors["yellow"]),
+                widget.Clock(format="%d/%m/%Y - %A, %I:%M %p", foreground=colors["pink"]),
             ],
             24,
             background=colors["background"],
             border_width=4,  # Draw top and bottom borders
-            border_color=colors["pink"],
+            border_color=colors["purple"],
+            margin=4
         ),
     ),
 ]
