@@ -43,6 +43,7 @@ colors = {
             "red": "#ff5555",
             "yellow": "#f1fa8c"
         }
+font = "Itim bold"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -139,7 +140,7 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="mono",
+    font=font,
     fontsize=14,
     padding=4,
 )
@@ -201,7 +202,7 @@ screens = [
                     foreground=colors["purple"]
                     ),
                 widget.Systray(),
-                widget.Clock(format="%d/%m/%Y - %A, %I:%M %p", foreground=colors["pink"]),
+			widget.Clock(format="%d/%m/%Y - %A, %H:%M %p", foreground=colors["pink"]),
             ],
             24,
             background=colors["background"],
