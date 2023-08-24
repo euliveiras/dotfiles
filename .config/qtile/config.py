@@ -43,7 +43,7 @@ colors = {
             "red": "#ff5555",
             "yellow": "#f1fa8c"
         }
-font = "Itim bold"
+font = "Londrina Solid"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
