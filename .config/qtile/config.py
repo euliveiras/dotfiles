@@ -84,9 +84,15 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
- Key([   ], "XF86AudioRaiseVolume", lazy.spawn("amixer sset Master 1%+")),
- Key([   ], "XF86AudioLowerVolume", lazy.spawn("amixer sset Master 1%-")),
+
+# audio keys
+ Key([   ], "XF86AudioRaiseVolume", lazy.spawn("amixer sset Master 5%+")),
+ Key([   ], "XF86AudioLowerVolume", lazy.spawn("amixer sset Master 5%-")),
  Key([   ], "XF86AudioMute", lazy.spawn("amixer sset Master toggle")),
+ Key([   ], "XF86AudioPlay", lazy.spawn("playerctl play-pause"), desc="Play/pause most recent output"),
+ Key([   ], "XF86AudioNext", lazy.spawn("playerctl next"), desc="go to next"),
+ Key([   ], "XF86AudioPrev", lazy.spawn("playerctl previous"), desc="go to previous"),
+ Key([   ], "XF86AudioStop", lazy.spawn("playerctl stop"), desc="Stop current sound output"),
 ]
 
 
