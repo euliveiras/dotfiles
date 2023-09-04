@@ -170,6 +170,7 @@ screens = [
                     lineWidth=5,
                     foreground=colors["purple"]
                     ),
+		widget.Mpris2(width=400),
                 widget.Prompt(prompt="> ", padding=8),
                 widget.Spacer(length=bar.STRETCH),
                 widget.PulseVolume(fmt="volume: {}"),
