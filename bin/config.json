@@ -1,0 +1,23 @@
+{
+    "default_path": "/home/euliveiras/.local/bin",
+    "bins": {
+        "/home/euliveiras/.local/bin/bin": {
+            "path": "/home/euliveiras/.local/bin/bin",
+            "remote_name": "bin",
+            "version": "v0.17.0",
+            "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "url": "github.com/marcosnils/bin",
+            "provider": "github",
+            "package_path": ""
+        },
+        "/home/euliveiras/.local/bin/pscale": {
+            "path": "/home/euliveiras/.local/bin/pscale",
+            "remote_name": "pscale",
+            "version": "v0.153.0",
+            "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "url": "https://github.com/planetscale/cli",
+            "provider": "github",
+            "package_path": "pscale"
+        }
+    }
+}
