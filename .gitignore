@@ -5,17 +5,6 @@ eog/
 gtk-2.0/
 gtk-3.0/
 obsidian/
-<<<<<<< HEAD
-pavucontrol.ini/
-planetscale/
-procps/
-pulse/
-QtProject.conf/
-spotify/
-systemd/
-user-dirs.dirs/
-user-dirs.locale/
-=======
 pavucontrol.ini
 planetscale/
 procps/
@@ -25,5 +14,4 @@ spotify/
 systemd/
 user-dirs.dirs
 user-dirs.locale
->>>>>>> 748b3a83 (changed folder)
 vlc/
