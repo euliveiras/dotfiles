@@ -28,6 +28,7 @@ from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+from aliases import aliases
 
 mod = "mod4"
 terminal = guess_terminal("kitty")
@@ -83,7 +84,7 @@ keys = [
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key([mod], "r", lazy.spawncmd(aliases=aliases), desc="Spawn a command using a prompt widget"),
 
 # audio keys
  Key([   ], "XF86AudioRaiseVolume", lazy.spawn("amixer sset Master 5%+")),
