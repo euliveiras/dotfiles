@@ -130,7 +130,7 @@ layouts = [
         border_normal=colors["background"],
         border_on_single=True,
         border_width=4,
-        margin=4
+        margin=2
         ),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
