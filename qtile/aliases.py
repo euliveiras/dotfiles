@@ -9,3 +9,4 @@ for alias in file:
         (key, _, value) = alias.partition("=")
         (_, label) = key.split(" ")
         aliases[label] = value.rstrip().replace("'", "")
+
