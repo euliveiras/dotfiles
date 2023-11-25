@@ -1,107 +1,14 @@
-# Copyright (c) 2010 Aldo Cortesi
-# Copyright (c) 2010, 2014 dequis
-# Copyright (c) 2012 Randall Ma
-# Copyright (c) 2012-2014 Tycho Andersen
-# Copyright (c) 2012 Craig Barnes
-# Copyright (c) 2013 horsik
-# Copyright (c) 2013 Tao Sauvage
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
-from libqtile import bar, layout, widget
+from libqtile import layout 
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from aliases import aliases
+from bars import topBar
+from colors import colors
 import start
 
 mod = "mod4"
 terminal = guess_terminal("kitty")
-colors = {
-    "background": "#282a36",
-    "selection": "#44475a",
-    "foreground": "#f8f8f2",
-    "cyan": "#22d3ee",
-    "green": "#34d399",
-    "orange": "#ffb86c",
-    "pink": "#ff79c6",
-    "purple": "#bd93f9",
-    "red": "#ff5555",
-    "yellow": {"background": "#facc15"},
-    "dark": {"background": "#71717a"}
-}
-
-topBar = bar.Bar(
-    [
-        widget.Image(
-            filename="~/.local/share/icons/endeavour-os.png", margin=3),
-        widget.Sep(
-            lineWidth=5,
-            foreground=colors["purple"]
-        ),
-        widget.CurrentLayout(),
-        widget.Sep(
-            lineWidth=5,
-            foreground=colors["purple"]
-        ),
-        widget.GroupBox(
-            this_current_screen_border=colors["cyan"],
-            padding_y=2,
-            inactive="#ffffff"
-        ),
-        widget.Sep(
-            lineWidth=5,
-            foreground=colors["purple"]
-        ),
-        widget.Mpris2(width=400),
-        widget.Prompt(prompt="> ", padding=8),
-        widget.Spacer(length=bar.STRETCH),
-        widget.StatusNotifier(),
-        widget.PulseVolume(
-            background=colors["dark"]["background"], fmt="volume: {}"),
-        widget.ThermalSensor(
-            tag_sensor="edge", background=colors["cyan"]),
-        widget.Memory(background=colors["orange"],
-                      format="{MemUsed: .0f}{mm} -{MemTotal: .0f}{mm}"
-                      ),
-        widget.CPU(background=colors["green"]),
-        # widget.Sep(lineWidth=5,foreground=colors["purple"]),
-        widget.Chord(
-            chords_colors={
-                "launch": ("#ff0000", "#ffffff"),
-            },
-            name_transform=lambda name: name.upper(),
-        ),
-        # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
-        widget.Net(
-            prefix="M", background=colors["yellow"]["background"]),
-        # widget.Sep(lineWidth= 5, foreground= colors["purple"]),
-        # widget.Systray(icon_size=16),
-        widget.Clock(format="%d/%m/%Y - %A, %H:%M %p",
-                     background=colors["pink"]),
-    ],
-    24,
-    background=colors["background"],
-    border_width=4,  # Draw top and bottom borders
-    border_color=colors["purple"],
-    margin=2
-)
 
 font = "Londrina Solid"
 
