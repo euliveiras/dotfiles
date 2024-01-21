@@ -9,5 +9,6 @@ colors = {
     "purple": "#bd93f9",
     "red": "#ff5555",
     "yellow": {"background": "#facc15"},
-    "dark": {"background": "#71717a"}
+    "dark": {"background": "#71717a"},
+    "white": "#FFFFFF"
 }
