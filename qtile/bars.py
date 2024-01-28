@@ -35,15 +35,15 @@ topBar = bar.Bar(
         widget.PulseVolume(
             background=colors["dark"]["background"], fmt="volume: {}"),
         widget.ThermalSensor(
-            tag_sensor="Tctl", background=colors["cyan"], format='{tag}: {temp:.0f}{unit}'),
+            tag_sensor="Tctl", background=colors["cyan"], format='{temp:.0f}{unit}', fmt="cpu {}"),
         widget.Sep(
             padding=1, foreground=colors["white"], background=colors["white"]),
         widget.ThermalSensor(
-            tag_sensor="mem", background=colors["cyan"], format='{tag}: {temp:.0f}{unit}'),
+            tag_sensor="mem", background=colors["cyan"], format='{temp:.0f}{unit}', fmt="mem {}"),
         widget.Sep(
             padding=1, foreground=colors["white"], background=colors["white"]),
         widget.ThermalSensor(
-            tag_sensor="edge", background=colors["cyan"], format='{tag}: {temp:.0f}{unit}'),
+            tag_sensor="edge", background=colors["cyan"], format='{temp:.0f}{unit}', fmt="gpu {}"),
         widget.Memory(background=colors["orange"],
                       format="{MemUsed: .0f}{mm} -{MemTotal: .0f}{mm}"
                       ),
