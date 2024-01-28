@@ -1,11 +1,10 @@
-from libqtile import layout 
+from libqtile import layout
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from aliases import aliases
 from bars import topBar
 from colors import colors
-import start
 
 mod = "mod4"
 terminal = guess_terminal("kitty")
@@ -72,7 +71,10 @@ keys = [
 ]
 
 
-groups = [Group(i) for i in "123"]
+groups = [Group("1", matches=[Match(wm_class="firefox")], label="\uf488"),
+          Group("2", label="\ue795"),
+          Group("3", matches=[Match(wm_class="spotify")], label="\uf001"),
+          Group("4", matches=[Match(wm_class="steam")], label="\uf11b")]
 
 for i in groups:
     keys.extend(

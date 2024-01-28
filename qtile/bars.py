@@ -1,6 +1,9 @@
 from libqtile import bar, widget
 from colors import colors
 
+groupBoxFont = "JetBrainsMonoNLNerdFontPropo"
+
+
 topBar = bar.Bar(
     [
         widget.Image(
@@ -16,12 +19,14 @@ topBar = bar.Bar(
         ),
         widget.GroupBox(
             this_current_screen_border=colors["cyan"],
-            padding_y=2,
-            inactive="#ffffff"
+            inactive=colors["white"],
+            font=groupBoxFont,
+            fontsize=14,
+            highlight_method='line',
         ),
         widget.Sep(
             lineWidth=5,
-            foreground=colors["purple"]
+            foreground=colors["purple"],
         ),
         widget.Mpris2(width=400),
         widget.Prompt(prompt="> ", padding=8),

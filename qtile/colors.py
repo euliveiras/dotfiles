@@ -10,5 +10,6 @@ colors = {
     "red": "#ff5555",
     "yellow": {"background": "#facc15"},
     "dark": {"background": "#71717a"},
-    "white": "#FFFFFF"
+    "white": "#FFFFFF",
+	"white-sec-var": "#bfbfbf"
 }
