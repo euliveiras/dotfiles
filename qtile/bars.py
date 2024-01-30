@@ -29,7 +29,7 @@ topBar = bar.Bar(
             foreground=colors["purple"],
         ),
         widget.Mpris2(width=400),
-        widget.Prompt(prompt="> ", padding=8),
+        widget.Prompt(prompt="> ", padding=8, scroll=True, width=300),
         widget.Spacer(length=bar.STRETCH),
         widget.StatusNotifier(),
         widget.PulseVolume(
