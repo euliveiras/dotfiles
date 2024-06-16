@@ -23,6 +23,7 @@ topBar = bar.Bar(
             font=groupBoxFont,
             fontsize=14,
             highlight_method='line',
+            disable_drag=True
         ),
         widget.Sep(
             lineWidth=5,
@@ -32,6 +33,7 @@ topBar = bar.Bar(
         widget.Prompt(prompt="> ", padding=8, scroll=True, width=250),
         widget.Spacer(length=bar.STRETCH),
         widget.StatusNotifier(),
+        #widget.Backlight(),
         widget.PulseVolume(
             background=colors["dark"]["background"], fmt="volume: {}"),
         widget.ThermalSensor(

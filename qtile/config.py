@@ -71,10 +71,12 @@ keys = [
 ]
 
 
-groups = [Group("1", matches=[Match(wm_class="firefox")], label="\uf488"),
-          Group("2", label="\ue795"),
-          Group("3", matches=[Match(wm_class="spotify")], label="\uf001"),
-          Group("4", matches=[Match(wm_class="steam")], label="\uf11b")]
+groups = [
+    Group("1", matches=[Match(wm_class="firefox")], label="\ueefe"),
+    Group("2", label="\uf488"),
+    Group("3", label="\ue795"),
+    Group("4", matches=[Match(wm_class="spotify")], label="\uf001"),
+    Group("5", matches=[Match(wm_class="steam")], label="\uf11b")]
 
 for i in groups:
     keys.extend(
