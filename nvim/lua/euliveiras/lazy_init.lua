@@ -12,8 +12,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-    spec = "euliveiras.lazy",
-    change_detection = { notify = false }
+  spec = "euliveiras.lazy",
+  change_detection = { notify = false },
 })
 
 vim.api.nvim_create_autocmd("BufWritePre", {
@@ -29,3 +29,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "qf" },
+  command = [[nnoremap <buffer> <CR> <CR>:cclose<CR>]],
+})
