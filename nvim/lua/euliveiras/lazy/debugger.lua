@@ -2,6 +2,9 @@ return {
   {
     "theHamsta/nvim-dap-virtual-text",
   },
+  {
+"mfussenegger/nvim-dap-python"
+},
   { "nvim-neotest/nvim-nio" },
   {
     "rcarriga/nvim-dap-ui",
@@ -19,10 +22,11 @@ return {
     config = function()
       require("mason").setup({})
       require("mason-nvim-dap").setup({
-        ensure_installed = { "python", "chrome" },
+        ensure_installed = { "python", "pwa-chrome" },
         automatic_installation = true,
       })
       require("nvim-dap-virtual-text").setup({})
+      require("dap-python").setup("/Users/euliveiras/.local/pipx/venvs/debugpy/bin/python3")
       local dap = require("dap")
       local debugger_path = vim.env.HOME .. "/www/js-debug/src/dapDebugServer.js"
       local ui = require("dapui")
@@ -57,6 +61,19 @@ return {
           args = { debugger_path, "${port}" },
         },
       }
+
+      for _, lang in ipairs({
+            "typescriptreact",
+            "javascriptreact",
+        }) do
+            dap.configurations[lang] = {{
+                type = "pwa-chrome",
+                request = "launch",
+                name = "Launch Chrome",
+                url = "http://localhost:3000",
+                sourceMaps = true,
+            }} 
+      end
 
       for _, language in ipairs({ "typescript", "javascript" }) do
         dap.configurations[language] = {
