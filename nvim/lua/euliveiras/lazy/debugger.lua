@@ -63,12 +63,80 @@ return {
 
       require("nvim-dap-virtual-text").setup({})
 
-      -- Python DAP
-      require("dap-python").setup(
-        vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
-      )
+      -- =========================
+      -- Python / Django DAP
+      -- =========================
+      local debugpy_path = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
 
+      require("dap-python").setup(debugpy_path)
+
+      local function get_python_path()
+        local cwd = vim.fn.getcwd()
+
+        local local_venv = cwd .. "/.venv/bin/python"
+        if vim.fn.executable(local_venv) == 1 then
+          return local_venv
+        end
+
+        local venv = os.getenv("VIRTUAL_ENV")
+        if venv then
+          return venv .. "/bin/python"
+        end
+
+        return "python3"
+      end
+
+      dap.configurations.python = dap.configurations.python or {}
+
+      table.insert(dap.configurations.python, {
+        type = "python",
+        request = "launch",
+        name = "Django: runserver",
+        program = "${workspaceFolder}/manage.py",
+        args = {
+          "runserver",
+          "0.0.0.0:8000",
+          "--noreload",
+        },
+        pythonPath = get_python_path,
+        django = true,
+        justMyCode = true,
+        console = "integratedTerminal",
+        cwd = "${workspaceFolder}",
+      })
+
+      table.insert(dap.configurations.python, {
+        type = "python",
+        request = "launch",
+        name = "Python: current file",
+        program = "${file}",
+        pythonPath = get_python_path,
+        justMyCode = true,
+        console = "integratedTerminal",
+        cwd = "${workspaceFolder}",
+      })
+
+      table.insert(dap.configurations.python, {
+        type = "python",
+        request = "launch",
+        name = "Django: shell",
+        program = "${workspaceFolder}/manage.py",
+        args = {
+          "shell",
+        },
+        pythonPath = get_python_path,
+        django = true,
+        justMyCode = true,
+        console = "integratedTerminal",
+        cwd = "${workspaceFolder}",
+        env = {
+          DJANGO_SETTINGS_MODULE = "your_project.settings",
+        },
+      })
+
+      -- =========================
       -- DAP UI
+      -- =========================
       dapui.setup({})
 
       dap.listeners.before.attach.dapui_config = function()
@@ -87,7 +155,9 @@ return {
         dapui.close()
       end
 
+      -- =========================
       -- Signs
+      -- =========================
       vim.fn.sign_define("DapBreakpoint", {
         text = "●",
         texthl = "DiagnosticError",
@@ -102,7 +172,9 @@ return {
         numhl = "",
       })
 
+      -- =========================
       -- JavaScript / TypeScript Adapter via Mason
+      -- =========================
       dap.adapters["pwa-node"] = {
         type = "server",
         host = "127.0.0.1",
@@ -131,9 +203,8 @@ return {
             program = "${file}",
             cwd = "${workspaceFolder}",
             runtimeExecutable = "node",
-            runtimeArgs = {
-              "--inspect-brk",
-            },
+            runtimeArgs = {},
+            stopOnEntry = true,
             sourceMaps = true,
             protocol = "inspector",
             console = "integratedTerminal",
@@ -145,7 +216,6 @@ return {
             name = "Launch current TS file with ts-node",
             runtimeExecutable = "node",
             runtimeArgs = {
-              "--inspect-brk",
               "-r",
               "ts-node/register",
               "-r",
@@ -155,6 +225,7 @@ return {
               "${file}",
             },
             cwd = "${workspaceFolder}",
+            stopOnEntry = true,
             sourceMaps = true,
             protocol = "inspector",
             console = "integratedTerminal",
