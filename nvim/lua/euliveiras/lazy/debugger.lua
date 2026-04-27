@@ -28,7 +28,7 @@ return {
       require("nvim-dap-virtual-text").setup({})
       require("dap-python").setup("/Users/euliveiras/.local/pipx/venvs/debugpy/bin/python3")
       local dap = require("dap")
-      local debugger_path = vim.env.HOME .. "/www/js-debug/src/dapDebugServer.js"
+      local js_debugger_path = vim.env.HOME .. "/.local/bin/js-debug/src/dapDebugServer.js"
       local ui = require("dapui")
 
       ui.setup({})
@@ -58,40 +58,20 @@ return {
         executable = {
           command = "node",
           -- 💀 Make sure to update this path to point to your installation
-          args = { debugger_path, "${port}" },
+          args = { js_debugger_path, "${port}" },
         },
       }
-
-      for _, lang in ipairs({
-            "typescriptreact",
-            "javascriptreact",
-        }) do
-            dap.configurations[lang] = {{
-                type = "pwa-chrome",
-                request = "launch",
-                name = "Launch Chrome",
-                url = "http://localhost:3000",
-                sourceMaps = true,
-            }} 
-      end
-
-      for _, language in ipairs({ "typescript", "javascript" }) do
-        dap.configurations[language] = {
-          {
-            type = "pwa-node",
-            request = "launch",
-            name = "Launch file",
-            program = "${file}",
-            cwd = "${workspaceFolder}",
-          },
-          {
-            type = "pwa-node",
-            request = "attach",
-            name = "Attach",
-            processId = require("dap.utils").pick_process,
-            cwd = "${workspaceFolder}",
-          },
-        }
+      
+      for _, language in ipairs({ "typescript", "javascript", "typescriptreact", "javascriptreact" }) do
+	      dap.configurations[language] = {
+	{
+	    type = "pwa-node",
+	    request = "launch",
+	    name = "Launch file",
+	    program = "${file}",
+	    cwd = "${workspaceFolder}",
+	  },
+	  }
       end
     end,
     keys = {
