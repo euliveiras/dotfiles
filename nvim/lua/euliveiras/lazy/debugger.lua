@@ -1,15 +1,52 @@
 return {
   {
-    "theHamsta/nvim-dap-virtual-text",
+    "nvim-neotest/nvim-nio",
   },
+
   {
-"mfussenegger/nvim-dap-python"
-},
-  { "nvim-neotest/nvim-nio" },
+    "williamboman/mason.nvim",
+    opts = {},
+  },
+
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "mfussenegger/nvim-dap",
+    },
+    opts = {
+      ensure_installed = {
+        "js-debug-adapter",
+        "python",
+      },
+      automatic_installation = true,
+    },
+  },
+
+  {
+    "theHamsta/nvim-dap-virtual-text",
+    dependencies = {
+      "mfussenegger/nvim-dap",
+    },
+    opts = {},
+  },
+
+  {
+    "mfussenegger/nvim-dap-python",
+    dependencies = {
+      "mfussenegger/nvim-dap",
+    },
+  },
+
   {
     "rcarriga/nvim-dap-ui",
-    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+    dependencies = {
+      "mfussenegger/nvim-dap",
+      "nvim-neotest/nvim-nio",
+    },
+    opts = {},
   },
+
   {
     "mfussenegger/nvim-dap",
     event = "VeryLazy",
@@ -18,62 +55,124 @@ return {
       "nvim-neotest/nvim-nio",
       "jay-babu/mason-nvim-dap.nvim",
       "theHamsta/nvim-dap-virtual-text",
+      "mfussenegger/nvim-dap-python",
     },
     config = function()
-      require("mason").setup({})
-      require("mason-nvim-dap").setup({
-        ensure_installed = { "python", "pwa-chrome" },
-        automatic_installation = true,
-      })
-      require("nvim-dap-virtual-text").setup({})
-      require("dap-python").setup("/Users/euliveiras/.local/pipx/venvs/debugpy/bin/python3")
       local dap = require("dap")
-      local js_debugger_path = vim.env.HOME .. "/.local/bin/js-debug/src/dapDebugServer.js"
-      local ui = require("dapui")
+      local dapui = require("dapui")
 
-      ui.setup({})
+      require("nvim-dap-virtual-text").setup({})
 
-      vim.fn.sign_define("DapBreakpoint", { text = "B" })
+      -- Python DAP
+      require("dap-python").setup(
+        vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
+      )
+
+      -- DAP UI
+      dapui.setup({})
 
       dap.listeners.before.attach.dapui_config = function()
-        ui.open()
+        dapui.open()
       end
 
       dap.listeners.before.launch.dapui_config = function()
-        ui.open()
+        dapui.open()
       end
 
-      dap.listeners.before.event_terminated.dapui_config = function()
-        ui.close()
+      dap.listeners.after.event_terminated.dapui_config = function()
+        dapui.close()
       end
 
-      dap.listeners.before.event_exited.dapui_config = function()
-        ui.close()
+      dap.listeners.after.event_exited.dapui_config = function()
+        dapui.close()
       end
 
+      -- Signs
+      vim.fn.sign_define("DapBreakpoint", {
+        text = "●",
+        texthl = "DiagnosticError",
+        linehl = "",
+        numhl = "",
+      })
+
+      vim.fn.sign_define("DapStopped", {
+        text = "▶",
+        texthl = "DiagnosticWarn",
+        linehl = "",
+        numhl = "",
+      })
+
+      -- JavaScript / TypeScript Adapter via Mason
       dap.adapters["pwa-node"] = {
         type = "server",
-        host = "localhost",
+        host = "127.0.0.1",
         port = "${port}",
         executable = {
           command = "node",
-          -- 💀 Make sure to update this path to point to your installation
-          args = { js_debugger_path, "${port}" },
+          args = {
+            vim.fn.stdpath("data")
+              .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
+            "${port}",
+          },
         },
       }
-      
-      for _, language in ipairs({ "typescript", "javascript", "typescriptreact", "javascriptreact" }) do
-	      dap.configurations[language] = {
-	{
-	    type = "pwa-node",
-	    request = "launch",
-	    name = "Launch file",
-	    program = "${file}",
-	    cwd = "${workspaceFolder}",
-	  },
-	  }
+
+      for _, language in ipairs({
+        "javascript",
+        "typescript",
+        "javascriptreact",
+        "typescriptreact",
+      }) do
+        dap.configurations[language] = {
+          {
+            type = "pwa-node",
+            request = "launch",
+            name = "Launch current JS file",
+            program = "${file}",
+            cwd = "${workspaceFolder}",
+            runtimeExecutable = "node",
+            runtimeArgs = {
+              "--inspect-brk",
+            },
+            sourceMaps = true,
+            protocol = "inspector",
+            console = "integratedTerminal",
+          },
+
+          {
+            type = "pwa-node",
+            request = "launch",
+            name = "Launch current TS file with ts-node",
+            runtimeExecutable = "node",
+            runtimeArgs = {
+              "--inspect-brk",
+              "-r",
+              "ts-node/register",
+              "-r",
+              "tsconfig-paths/register",
+            },
+            args = {
+              "${file}",
+            },
+            cwd = "${workspaceFolder}",
+            sourceMaps = true,
+            protocol = "inspector",
+            console = "integratedTerminal",
+          },
+
+          {
+            type = "pwa-node",
+            request = "attach",
+            name = "Attach to Node process",
+            processId = require("dap.utils").pick_process,
+            cwd = "${workspaceFolder}",
+            sourceMaps = true,
+            protocol = "inspector",
+          },
+        }
       end
     end,
+
     keys = {
       {
         "<leader>d",
@@ -87,8 +186,6 @@ return {
           require("dap").toggle_breakpoint()
         end,
         desc = "Toggle Breakpoint",
-        nowait = true,
-        remap = false,
       },
       {
         "<leader>dc",
@@ -96,8 +193,6 @@ return {
           require("dap").continue()
         end,
         desc = "Continue",
-        nowait = true,
-        remap = false,
       },
       {
         "<leader>di",
@@ -105,8 +200,6 @@ return {
           require("dap").step_into()
         end,
         desc = "Step Into",
-        nowait = true,
-        remap = false,
       },
       {
         "<leader>do",
@@ -114,8 +207,6 @@ return {
           require("dap").step_over()
         end,
         desc = "Step Over",
-        nowait = true,
-        remap = false,
       },
       {
         "<leader>du",
@@ -123,8 +214,6 @@ return {
           require("dap").step_out()
         end,
         desc = "Step Out",
-        nowait = true,
-        remap = false,
       },
       {
         "<leader>dr",
@@ -132,8 +221,6 @@ return {
           require("dap").repl.open()
         end,
         desc = "Open REPL",
-        nowait = true,
-        remap = false,
       },
       {
         "<leader>dl",
@@ -141,19 +228,14 @@ return {
           require("dap").run_last()
         end,
         desc = "Run Last",
-        nowait = true,
-        remap = false,
       },
       {
         "<leader>dq",
         function()
           require("dap").terminate()
           require("dapui").close()
-          require("nvim-dap-virtual-text").toggle()
         end,
         desc = "Terminate",
-        nowait = true,
-        remap = false,
       },
       {
         "<leader>db",
@@ -161,8 +243,6 @@ return {
           require("dap").list_breakpoints()
         end,
         desc = "List Breakpoints",
-        nowait = true,
-        remap = false,
       },
       {
         "<leader>de",
@@ -170,8 +250,6 @@ return {
           require("dap").set_exception_breakpoints({ "all" })
         end,
         desc = "Set Exception Breakpoints",
-        nowait = true,
-        remap = false,
       },
     },
   },
