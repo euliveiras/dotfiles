@@ -189,59 +189,91 @@ return {
         },
       }
 
-      for _, language in ipairs({
-        "javascript",
-        "typescript",
-        "javascriptreact",
-        "typescriptreact",
-      }) do
-        dap.configurations[language] = {
-          {
-            type = "pwa-node",
-            request = "launch",
-            name = "Launch current JS file",
-            program = "${file}",
-            cwd = "${workspaceFolder}",
-            runtimeExecutable = "node",
-            runtimeArgs = {},
-            stopOnEntry = true,
-            sourceMaps = true,
-            protocol = "inspector",
-            console = "integratedTerminal",
-          },
+      dap.adapters["pwa-chrome"] = {
+	  type = "server",
+	  host = "127.0.0.1",
+	  port = "${port}",
+	  executable = {
+	    command = "node",
+	    args = {
+	      vim.fn.stdpath("data")
+		.. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
+	      "${port}",
+	    },
+	  },
+	}
 
-          {
-            type = "pwa-node",
-            request = "launch",
-            name = "Launch current TS file with ts-node",
-            runtimeExecutable = "node",
-            runtimeArgs = {
-              "-r",
-              "ts-node/register",
-              "-r",
-              "tsconfig-paths/register",
-            },
-            args = {
-              "${file}",
-            },
-            cwd = "${workspaceFolder}",
-            stopOnEntry = true,
-            sourceMaps = true,
-            protocol = "inspector",
-            console = "integratedTerminal",
-          },
+	for _, language in ipairs({
+	  "javascript",
+	  "typescript",
+	  "javascriptreact",
+	  "typescriptreact",
+	}) do
+	  dap.configurations[language] = {
+	    {
+	      type = "pwa-node",
+	      request = "launch",
+	      name = "Launch current JS file",
+	      program = "${file}",
+	      cwd = "${workspaceFolder}",
+	      runtimeExecutable = "node",
+	      runtimeArgs = {},
+	      stopOnEntry = true,
+	      sourceMaps = true,
+	      protocol = "inspector",
+	      console = "integratedTerminal",
+	    },
 
-          {
-            type = "pwa-node",
-            request = "attach",
-            name = "Attach to Node process",
-            processId = require("dap.utils").pick_process,
-            cwd = "${workspaceFolder}",
-            sourceMaps = true,
-            protocol = "inspector",
-          },
-        }
-      end
+	    {
+	      type = "pwa-node",
+	      request = "launch",
+	      name = "Launch current TS file with ts-node",
+	      runtimeExecutable = "node",
+	      runtimeArgs = {
+		"-r",
+		"ts-node/register",
+		"-r",
+		"tsconfig-paths/register",
+	      },
+	      args = {
+		"${file}",
+	      },
+	      cwd = "${workspaceFolder}",
+	      stopOnEntry = true,
+	      sourceMaps = true,
+	      protocol = "inspector",
+	      console = "integratedTerminal",
+	    },
+
+	    {
+	      type = "pwa-node",
+	      request = "attach",
+	      name = "Attach to Node process",
+	      processId = require("dap.utils").pick_process,
+	      cwd = "${workspaceFolder}",
+	      sourceMaps = true,
+	      protocol = "inspector",
+	    },
+
+	    {
+	      type = "pwa-chrome",
+	      request = "attach",
+	      name = "React Native: attach Hermes / Metro",
+	      cwd = "${workspaceFolder}",
+	      webRoot = "${workspaceFolder}",
+	      port = 8081,
+	      sourceMaps = true,
+	      protocol = "inspector",
+	      timeout = 30000,
+	      sourceMapPathOverrides = {
+		["metro:///*"] = "${workspaceFolder}/*",
+		["webpack:///./*"] = "${workspaceFolder}/*",
+		["webpack:///*"] = "*",
+		["file:///*"] = "/*",
+	      },
+	    },
+	  }
+	end
     end,
 
     keys = {
