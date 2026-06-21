@@ -9,12 +9,34 @@ return {
     "hrsh7th/cmp-path",
     "hrsh7th/cmp-cmdline",
     "hrsh7th/nvim-cmp",
+    "L3MON4D3/LuaSnip",
+    "saadparwaiz1/cmp_luasnip",
   },
 
   config = function()
     local cmp = require("cmp")
+    local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
     require("mason").setup()
-    require("mason-lspconfig").setup()
+
+    local registry = require("mason-registry")
+    registry.refresh(function()
+      local ktlint = registry.get_package("ktlint")
+      if not ktlint:is_installed() then
+        ktlint:install()
+      end
+    end)
+
+    require("mason-lspconfig").setup({
+      ensure_installed = {
+        "kotlin_language_server",
+      },
+    })
+
+    vim.lsp.config("kotlin_language_server", {
+      capabilities = capabilities,
+    })
+    vim.lsp.enable("kotlin_language_server")
 
     local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
